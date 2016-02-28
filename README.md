@@ -144,7 +144,7 @@ GET Array
 
  - Philip Iezzi (Twitter [@fifbear][4])
 
-Copyright (c) 2016 Onlime Webhosting [www.onlime.ch][5] (Twitter [@ondalime][4])
+Copyright (c) 2016 Onlime Webhosting [www.onlime.ch][5] (Twitter [@ondalime][6])
 
 ## License
 
