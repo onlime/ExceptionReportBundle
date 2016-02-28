@@ -1,0 +1,31 @@
+{{ app.request.method }} {{ app.request.requestUri }}: {% if exception is defined and exception is HttpException %}[HTTP {{ exception.getStatusCode }}] {% endif %}{{ errorMsg }}
+{% if exception is defined %}
+Exception: {{ class(exception) }}
+{% endif %}
+
+{% set clientIp = app.request.getClientIp() %}
+Date:       {{ 'now'|date('r') }}
+ClientIP:   {{ clientIp }} ({{ geoData.countryCode }} / {{ geoData.countryName }})
+ClientHost: {{ gethostbyaddr(clientIp) }}
+ReqHost:    {{ app.request.host }}
+ReqUri:     {{ app.request.uri }}
+Env:        {{ app.environment }}
+Route:      {{ app.request.attributes.get("_route") }}
+User:       {{ app.user.username|default('(undefined)') }}
+Agent:      {{ app.request.server.get('HTTP_USER_AGENT') }}
+Referer:    {{ app.request.server.get('HTTP_REFERER') }}
+{% if exception is defined %}
+
+------------------------------------------------------------
+Stack trace
+------------------------------------------------------------
+{{ exception.traceAsString }}
+{% endif %}
+
+------------------------------------------------------------
+Request Parameters
+------------------------------------------------------------
+
+POST {{ print_r(app.request.request.all, true) }}
+
+GET {{ print_r(app.request.query.all, true) }}

@@ -1,0 +1,54 @@
+parameters:
+    onlime.class_twig_extension.class: Onlime\ExceptionReportBundle\Twig\ClassExtension
+    onlime.php_functions_twig_extension.class: Onlime\ExceptionReportBundle\Twig\PhpFunctionExtension
+    onlime.exception_email_report.class: Onlime\ExceptionReportBundle\Utils\EmailReport
+    onlime.exception_listener.class: Onlime\ExceptionReportBundle\EventListener\ExceptionListener
+    onlime.shutdown_listener.class: Onlime\ExceptionReportBundle\EventListener\ShutdownListener
+
+services:
+#    onlime_exception_report.example:
+#        class: Onlime\ExceptionReportBundle\Example
+#        arguments: ["@service_id", "plain_value", %parameter%]
+
+    onlime.class_twig_extension:
+        public:     false
+        class:      %onlime.class_twig_extension.class%
+        tags:
+            - { name: twig.extension }
+
+    onlime.php_functions_twig_extension:
+        public:     false
+        class:      %onlime.php_functions_twig_extension.class%
+        tags:
+            - { name: twig.extension }
+
+    onlime.exception_email_report:
+        class: %onlime.exception_email_report.class%
+        arguments:
+            - '@request_stack'
+            - '@maxmind.geoip'
+            - '@templating'
+            - '@mailer'
+            - %onlime.exception_report.email_to%
+            - %onlime.exception_report.email_from%
+
+    onlime.exception_listener:
+        class: %onlime.exception_listener.class%
+        arguments:
+            - '@onlime.exception_email_report'
+            - %onlime.exception_report.enable_email_reports%
+            - %onlime.exception_report.exclude_http%
+            - %onlime.exception_report.excluded_404s%
+        tags:
+            - { name: kernel.event_listener, event: kernel.exception, method: onKernelException }
+
+    onlime.shutdown_listener:
+        class: %onlime.shutdown_listener.class%
+        arguments:
+            - '@onlime.exception_email_report'
+            - %onlime.exception_report.enable_email_reports%
+            - %onlime.exception_report.exclude_http%
+            - %onlime.exception_report.excluded_404s%
+        tags:
+            - { name: kernel.event_listener, event: kernel.exception, method: register }
+

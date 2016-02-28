@@ -1,0 +1,7 @@
+# including controller object as external routing resource, using annotations
+# adding /exception prefix to all given rules
+# http://symfony.com/doc/current/bundles/SensioFrameworkExtraBundle/annotations/routing.html
+#
+onlime_exception_report_annotations:
+    type:     annotation
+    resource: "@OnlimeExceptionReportBundle/Controller/"
