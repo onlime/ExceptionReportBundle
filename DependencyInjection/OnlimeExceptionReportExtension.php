@@ -23,13 +23,6 @@ class OnlimeExceptionReportExtension extends Extension
         $config = $this->processConfiguration($configuration, $configs);
 
         $container->setParameter('onlime.exception_report.handlers', $config['handlers']);
-        /*
-        $container->setParameter('onlime.exception_report.email_to', $config['email_to']);
-        $container->setParameter('onlime.exception_report.email_from', $config['email_from']);
-        $container->setParameter('onlime.exception_report.enable_email_reports', $config['enable_email_reports']);
-        $container->setParameter('onlime.exception_report.exclude_http', $config['exclude_http']);
-        $container->setParameter('onlime.exception_report.excluded_404s', $config['excluded_404s']);
-        */
 
         $loader = new Loader\YamlFileLoader(
             $container,
