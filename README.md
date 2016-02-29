@@ -48,26 +48,30 @@ Configure bundle in config.yml:
 # app/config/config.yml
 
 onlime_exception_report:
-    # by default 4xx http exceptions are not reported:
-    # exclude_http: true
-    #
-    # to also log 4xx level errors (but not 404's):
-    # exclude_http: false
-    # excluded_404s:
-    #     - ^/
-    exclude_http: false
-    email_to: reports@example.com
-    email_from:
-    enable_email_reports: true
+    handlers:
+        swift:
+            # by default 4xx http exceptions are not reported:
+            # exclude_http: true
+            #
+            # to also log 4xx level errors (but not 404's):
+            # exclude_http: false
+            # excluded_404s:
+            #     - ^/
+            exclude_http: false
+            from_email: %email.admin%
+            to_email:   %email.admin%
+            subject:    "[Example.com] Exception Report"
 ```
 
-You might turn off email reports completely on dev environment:
+You might disable specific handlers on dev environment:
 
 ```yaml
 # app/config/config_dev.yml
 
 onlime_exception_report:
-    enable_email_reports: false
+    handlers:
+        swift:
+            enabled: false
 ```
 
 ## Sample Report
@@ -152,7 +156,7 @@ This bundle is released under the [MIT license](Resources/meta/LICENSE).
 
 ## Credits
 
-This bundle is both inspired by and is using some of the code from [ibrows/PhpAirbrakeBundle][1] which is a fork of [https://github.com/dbtlr/PhpAirbrakeBundle][7].
+This bundle is both inspired by and is using some of the code from [ibrows/PhpAirbrakeBundle][1] which is a fork of [dbtlr/PhpAirbrakeBundle][7].
 
 I would also like to thank [Mike Meier][8] for his advice.
 

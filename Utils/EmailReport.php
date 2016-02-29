@@ -2,9 +2,11 @@
 
 namespace Onlime\ExceptionReportBundle\Utils;
 
+use Maxmind\Bundle\GeoipBundle\Service\GeoipManager;
 use Symfony\Bundle\TwigBundle\TwigEngine;
 use Symfony\Component\HttpFoundation\RequestStack;
-use Maxmind\Bundle\GeoipBundle\Service\GeoipManager;
+use Symfony\Component\HttpKernel\Exception\HttpException;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 /**
  * Building the exception report email.
@@ -32,30 +34,23 @@ class EmailReport
     private $mailer;
 
     /**
-     * @var string
+     * @var array
      */
-    private $to;
-
-    /**
-     * @var string
-     */
-    private $from;
+    private $handlers;
 
     /**
      * @param RequestStack $requestStack
      * @param TwigEngine $templating
      * @param \Swift_Mailer $mailer
-     * @param string $to
-     * @param string $from
+     * @param array $handlers
      */
-    public function __construct(RequestStack $requestStack, GeoipManager $geoip, TwigEngine $templating, \Swift_Mailer $mailer, $to = null, $from = null)
+    public function __construct(RequestStack $requestStack, GeoipManager $geoip, TwigEngine $templating, \Swift_Mailer $mailer, array $handlers)
     {
         $this->request    = $requestStack->getCurrentRequest();
         $this->geoip      = $geoip;
         $this->templating = $templating;
         $this->mailer     = $mailer;
-        $this->to         = $to;
-        $this->from       = $from ?: $to;
+        $this->handlers   = $handlers;
     }
 
     /**
@@ -72,7 +67,7 @@ class EmailReport
      */
     public function send(\Exception $exception, $errorMsg = null)
     {
-        if (!$this->to) {
+        if (empty($this->handlers)) {
             return;
         }
 
@@ -96,12 +91,33 @@ class EmailReport
             ]
         );
 
-        $message = \Swift_Message::newInstance()
-            ->setSubject('Exception Report')
-            ->setTo($this->to)
-            ->setFrom($this->from)
-            ->setBody($body);
+        foreach ($this->handlers as $handler) {
+            //dump($handler);
+            if (!$handler['enabled']) {
+                continue;
+            }
 
-        $this->mailer->send($message);
+            // exclude 4xx level http exceptions
+            if ($exception instanceof HttpException) {
+                if ($handler['exclude_http']) {
+                    continue;
+                }
+
+                if ($handler['excluded_404s'] && $exception instanceof NotFoundHttpException) {
+                    $blacklist = '{(' . implode('|', $handler['excluded_404s']) . ')}i';
+                    if (preg_match($blacklist, $this->getRequest()->getPathInfo())) {
+                        continue;
+                    }
+                }
+            }
+
+            $message = \Swift_Message::newInstance()
+                ->setSubject($handler['subject'])
+                ->setTo($handler['to_email'])
+                ->setFrom($handler['from_email'])
+                ->setBody($body);
+
+            $this->mailer->send($message);
+        }
     }
 }

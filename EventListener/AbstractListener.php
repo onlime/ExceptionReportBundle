@@ -12,32 +12,11 @@ abstract class AbstractListener
     protected $emailReport;
 
     /**
-     * @var bool
-     */
-    protected $enableEmailReports;
-
-    /**
-     * @var bool
-     */
-    protected $excludeHttp;
-
-    /**
-     * @var array
-     */
-    protected $excluded404s;
-
-    /**
      * @param EmailReport $emailReport
-     * @param bool $enableEmailReports
-     * @param bool $excludeHttp
-     * @param array|null $excluded404s
      */
-    public function __construct(EmailReport $emailReport, $enableEmailReports = true, $excludeHttp = true, array $excluded404s = null)
+    public function __construct(EmailReport $emailReport)
     {
         $this->emailReport        = $emailReport;
-        $this->enableEmailReports = $enableEmailReports;
-        $this->excludeHttp        = $excludeHttp;
-        $this->excluded404s       = $excluded404s;
     }
 
     /**
@@ -46,8 +25,6 @@ abstract class AbstractListener
      */
     protected function sendEmailOnError(\Exception $exception, $message = null)
     {
-        if ($this->enableEmailReports) {
-            $this->emailReport->send($exception, $message);
-        }
+        $this->emailReport->send($exception, $message);
     }
 }

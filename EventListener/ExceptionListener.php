@@ -2,8 +2,6 @@
 namespace Onlime\ExceptionReportBundle\EventListener;
 
 use Symfony\Component\HttpKernel\Event\GetResponseForExceptionEvent;
-use Symfony\Component\HttpKernel\Exception\HttpException;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 /**
  * The OnlimeExceptionReportBundle ExceptionListener.
@@ -21,21 +19,6 @@ class ExceptionListener extends AbstractListener
     public function onKernelException(GetResponseForExceptionEvent $event)
     {
         $exception = $event->getException();
-
-        // exclude 4xx level http exceptions
-        if ($exception instanceof HttpException) {
-            if ($this->excludeHttp) {
-                return;
-            }
-
-            if ($this->excluded404s && $exception instanceof NotFoundHttpException) {
-                $request   = $this->emailReport->getRequest();
-                $blacklist = '{(' . implode('|', $this->excluded404s) . ')}i';
-                if (preg_match($blacklist, $request->getPathInfo())) {
-                    return;
-                }
-            }
-        }
 
         $this->sendEmailOnError($exception);
 

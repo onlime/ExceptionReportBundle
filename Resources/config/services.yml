@@ -29,26 +29,17 @@ services:
             - '@maxmind.geoip'
             - '@templating'
             - '@mailer'
-            - %onlime.exception_report.email_to%
-            - %onlime.exception_report.email_from%
+            - %onlime.exception_report.handlers%
 
     onlime.exception_listener:
         class: %onlime.exception_listener.class%
-        arguments:
-            - '@onlime.exception_email_report'
-            - %onlime.exception_report.enable_email_reports%
-            - %onlime.exception_report.exclude_http%
-            - %onlime.exception_report.excluded_404s%
+        arguments: ['@onlime.exception_email_report']
         tags:
             - { name: kernel.event_listener, event: kernel.exception, method: onKernelException }
 
     onlime.shutdown_listener:
         class: %onlime.shutdown_listener.class%
-        arguments:
-            - '@onlime.exception_email_report'
-            - %onlime.exception_report.enable_email_reports%
-            - %onlime.exception_report.exclude_http%
-            - %onlime.exception_report.excluded_404s%
+        arguments: ['@onlime.exception_email_report']
         tags:
             - { name: kernel.event_listener, event: kernel.exception, method: register }
 

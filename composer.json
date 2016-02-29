@@ -19,6 +19,7 @@
         "symfony/dependency-injection": "~3.0",
         "symfony/config": "~3.0",
         "symfony/http-kernel": "~3.0",
+        "symfony/twig-bundle": "~3.0",
         "symfony/swiftmailer-bundle": "~2.3",
         "maxmind/geoip": "~v1.1.0"
     },
