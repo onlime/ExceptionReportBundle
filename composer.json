@@ -3,15 +3,23 @@
     "description": "Enables simple exception reports by email in your Symfony3 project.",
     "type": "symfony-bundle",
     "keywords": [
+        "Onlime",
+        "exceptions",
+        "error handling",
         "logging",
-        "exceptions"
+        "Symfony3",
+        "bundle"
     ],
-    "homepage": "https://github.com/onlime/ExceptionReportBundle",
+    "homepage": "https://www.onlime.ch/",
     "license": "MIT",
     "authors": [
         {
             "name": "Philip Iezzi",
             "email": "info@onlime.ch"
+        },
+        {
+            "name": "Onlime Webhosting",
+            "homepage": "https://github.com/onlime"
         }
     ],
     "require": {
