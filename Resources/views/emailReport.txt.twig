@@ -10,6 +10,7 @@ ClientHost: {{ gethostbyaddr(clientIp) }}
 ReqHost:    {{ app.request.host }}
 ReqUri:     {{ app.request.uri }}
 Env:        {{ app.environment }}
+Locale:     {{ app.request.locale|default(app.request.defaultLocale ~ '(default)') }}
 Route:      {{ app.request.attributes.get("_route") }}
 User:       {{ app.user.username|default('(undefined)') }}
 Agent:      {{ app.request.server.get('HTTP_USER_AGENT') }}
