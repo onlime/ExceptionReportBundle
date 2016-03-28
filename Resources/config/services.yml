@@ -35,7 +35,8 @@ services:
         class: '%onlime.exception_listener.class%'
         arguments: ['@onlime.exception_email_report']
         tags:
-            - { name: kernel.event_listener, event: kernel.exception, method: onKernelException }
+            - { name: kernel.event_listener, event: kernel.exception }
+            - { name: kernel.event_listener, event: exception.report }
 
     onlime.shutdown_listener:
         class: '%onlime.shutdown_listener.class%'

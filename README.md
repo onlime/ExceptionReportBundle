@@ -144,6 +144,29 @@ GET Array
 )
 ```
 
+## Special Use Cases
+
+### Trigger Exception report without breaking application
+
+Let's say you have caught an exception (e.g. from an API request) and do not wish to break the application flow, but still want to report the complete exception. That's what the `ExceptionEvent` is for - simply trigger it in your controller like this:
+
+```php
+<?php
+use Onlime\ExceptionReportBundle\Event\ExceptionEvent;
+use Onlime\ExceptionReportBundle\Event\ExceptionEvents;
+
+// ...
+
+        try {
+            // do some dangerous stuff here...
+        } catch (\Exception $e) {
+            $this->get('event_dispatcher')->dispatch(
+                ExceptionEvents::REPORT,
+                new ExceptionEvent($e)
+            );
+        }
+```
+
 ## Authors
 
  - Philip Iezzi (Twitter [@fifbear][4])
