@@ -12,33 +12,33 @@ services:
 
     onlime.class_twig_extension:
         public:     false
-        class:      %onlime.class_twig_extension.class%
+        class:      '%onlime.class_twig_extension.class%'
         tags:
             - { name: twig.extension }
 
     onlime.php_functions_twig_extension:
         public:     false
-        class:      %onlime.php_functions_twig_extension.class%
+        class:      '%onlime.php_functions_twig_extension.class%'
         tags:
             - { name: twig.extension }
 
     onlime.exception_email_report:
-        class: %onlime.exception_email_report.class%
+        class: '%onlime.exception_email_report.class%'
         arguments:
             - '@request_stack'
             - '@maxmind.geoip'
             - '@templating'
             - '@mailer'
-            - %onlime.exception_report.handlers%
+            - '%onlime.exception_report.handlers%'
 
     onlime.exception_listener:
-        class: %onlime.exception_listener.class%
+        class: '%onlime.exception_listener.class%'
         arguments: ['@onlime.exception_email_report']
         tags:
             - { name: kernel.event_listener, event: kernel.exception, method: onKernelException }
 
     onlime.shutdown_listener:
-        class: %onlime.shutdown_listener.class%
+        class: '%onlime.shutdown_listener.class%'
         arguments: ['@onlime.exception_email_report']
         tags:
             - { name: kernel.event_listener, event: kernel.exception, method: register }

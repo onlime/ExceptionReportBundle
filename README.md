@@ -58,8 +58,8 @@ onlime_exception_report:
             # excluded_404s:
             #     - ^/
             exclude_http: false
-            from_email: %email.admin%
-            to_email:   %email.admin%
+            from_email: '%email.admin%'
+            to_email:   '%email.admin%'
             subject:    "[Example.com] Exception Report"
 ```
 
