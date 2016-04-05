@@ -20,7 +20,11 @@ Referer:    {{ app.request.server.get('HTTP_REFERER') }}
 ------------------------------------------------------------
 Stack trace
 ------------------------------------------------------------
+{% if showStacktrace %}
 {{ exception.traceAsString }}
+{% else %}
+**OBFUSCATED**
+{% endif %}
 {% endif %}
 
 ------------------------------------------------------------

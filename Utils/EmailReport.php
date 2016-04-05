@@ -82,15 +82,6 @@ class EmailReport
             'countryName' => ($geoRecord) ? $geoRecord->getCountryName() : 'Unknown Country'
         ];
 
-        $body = $this->templating->render(
-            'OnlimeExceptionReportBundle::emailReport.txt.twig',
-            [
-                'geoData'   => $geoData,
-                'exception' => $exception,
-                'errorMsg'  => $errorMsg
-            ]
-        );
-
         foreach ($this->handlers as $handler) {
             //dump($handler);
             if (!$handler['enabled']) {
@@ -111,11 +102,28 @@ class EmailReport
                 }
             }
 
-            $message = \Swift_Message::newInstance()
-                ->setSubject($handler['subject'])
+            // hide stacktrace output for specific exceptions
+            $showStacktrace = true;
+            foreach ($handler['no_stacktrace_on_exceptions'] as $noStacktraceException) {
+                if ($exception instanceof $noStacktraceException) {
+                    $showStacktrace = false;
+                    break;
+                }
+            }
+
+            $body = $this->templating->render(
+                'OnlimeExceptionReportBundle::emailReport.txt.twig',
+                [
+                    'geoData'        => $geoData,
+                    'exception'      => $exception,
+                    'errorMsg'       => $errorMsg,
+                    'showStacktrace' => $showStacktrace
+                ]
+            );
+
+            $message = \Swift_Message::newInstance($handler['subject'], $body)
                 ->setTo($handler['to_email'])
-                ->setFrom($handler['from_email'])
-                ->setBody($body);
+                ->setFrom($handler['from_email']);
 
             $this->mailer->send($message);
         }

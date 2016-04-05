@@ -57,6 +57,13 @@ onlime_exception_report:
             # exclude_http: false
             # excluded_404s:
             #     - ^/
+            #
+            # to hide stacktrace output for specific exceptions,
+            # add them with fully qualified class name:
+            # no_stacktrace_on_exceptions:
+            #     - Doctrine\DBAL\Exception\ConnectionException
+            #     - PDOException
+            #
             exclude_http: false
             from_email: '%email.admin%'
             to_email:   '%email.admin%'
