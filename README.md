@@ -81,6 +81,31 @@ onlime_exception_report:
             enabled: false
 ```
 
+### Default configuration reference
+
+
+```yaml
+# Default configuration for extension with alias: "onlime_exception_report"
+onlime_exception_report:
+    handlers:
+
+        # Prototype
+        name:
+            enabled:              true
+            exclude_http:         true
+            excluded_404s:        []
+            no_stacktrace_on_exceptions:  []
+            from_email:           ~ # Required
+            to_email:             [] # Required
+            subject:              'Exception Report'
+```
+
+This default configuration reference was generated with the following command:
+
+```bash
+$ bin/console config:dump-reference onlime_exception_report
+```
+
 ## Sample Report
 
 Simply throw an exception in one of your controllers, e.g.:
