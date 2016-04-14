@@ -87,6 +87,8 @@ class EmailReport
             if (!$handler['enabled']) {
                 continue;
             }
+            
+            $subject = $handler['subject'];
 
             // exclude 4xx level http exceptions
             if ($exception instanceof HttpException) {
@@ -100,6 +102,9 @@ class EmailReport
                         continue;
                     }
                 }
+                
+                // append HTTP status code to subject
+                $subject .= sprintf(' (HTTP %s)', $exception->getStatusCode());
             }
 
             // hide stacktrace output for specific exceptions
@@ -121,7 +126,7 @@ class EmailReport
                 ]
             );
 
-            $message = \Swift_Message::newInstance($handler['subject'], $body)
+            $message = \Swift_Message::newInstance($subject, $body)
                 ->setTo($handler['to_email'])
                 ->setFrom($handler['from_email']);
 
