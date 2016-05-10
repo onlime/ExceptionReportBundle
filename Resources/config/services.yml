@@ -33,14 +33,14 @@ services:
 
     onlime.exception_listener:
         class: '%onlime.exception_listener.class%'
-        arguments: ['@onlime.exception_email_report']
+        arguments: ['@onlime.exception_email_report', '@logger']
         tags:
             - { name: kernel.event_listener, event: kernel.exception }
             - { name: kernel.event_listener, event: exception.report }
 
     onlime.shutdown_listener:
         class: '%onlime.shutdown_listener.class%'
-        arguments: ['@onlime.exception_email_report']
+        arguments: ['@onlime.exception_email_report', '@logger']
         tags:
             - { name: kernel.event_listener, event: kernel.exception, method: register }
 
