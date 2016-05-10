@@ -1,7 +1,7 @@
 parameters:
     onlime.class_twig_extension.class: Onlime\ExceptionReportBundle\Twig\ClassExtension
     onlime.php_functions_twig_extension.class: Onlime\ExceptionReportBundle\Twig\PhpFunctionExtension
-    onlime.exception_email_report.class: Onlime\ExceptionReportBundle\Utils\EmailReport
+    onlime.exception_email_report.class: Onlime\ExceptionReportBundle\Utils\EmailReporter
     onlime.exception_listener.class: Onlime\ExceptionReportBundle\EventListener\ExceptionListener
     onlime.shutdown_listener.class: Onlime\ExceptionReportBundle\EventListener\ShutdownListener
 

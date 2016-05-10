@@ -2,15 +2,15 @@
 
 namespace Onlime\ExceptionReportBundle\EventListener;
 
-use Onlime\ExceptionReportBundle\Utils\EmailReport;
+use Onlime\ExceptionReportBundle\Utils\EmailReporter;
 use Psr\Log\LoggerInterface;
 
 abstract class AbstractListener
 {
     /**
-     * @var EmailReport
+     * @var EmailReporter
      */
-    private $emailReport;
+    private $emailReporter;
 
     /**
      * @var LoggerInterface
@@ -18,13 +18,13 @@ abstract class AbstractListener
     private $logger;
 
     /**
-     * @param EmailReport $emailReport
+     * @param EmailReporter $emailReporter
      * @param LoggerInterface $logger
      */
-    public function __construct(EmailReport $emailReport, LoggerInterface $logger)
+    public function __construct(EmailReporter $emailReporter, LoggerInterface $logger)
     {
-        $this->emailReport = $emailReport;
-        $this->logger      = $logger;
+        $this->emailReporter = $emailReporter;
+        $this->logger        = $logger;
     }
 
     /**
@@ -36,7 +36,7 @@ abstract class AbstractListener
     protected function sendEmailOnError(\Exception $exception, $message = null)
     {
         try {
-            $this->emailReport->send($exception, $message);
+            $this->emailReporter->send($exception, $message);
         } catch (\Exception $e) {
             // silently fail if exception report could not be sent
             $this->logger->error(sprintf(

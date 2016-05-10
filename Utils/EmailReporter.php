@@ -11,7 +11,7 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 /**
  * Building the exception report email.
  */
-class EmailReport
+class EmailReporter
 {
     /**
      * var Request
